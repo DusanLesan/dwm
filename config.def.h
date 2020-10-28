@@ -31,15 +31,16 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class         instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",        NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",     NULL,       NULL,       1 << 0,       0,           1 },
-	{ "code-oss",    NULL,       NULL,       1 << 1,       0,           1 },
-	{ "SmartGit",    NULL,       NULL,       1 << 2,       0,           1 },
-	{ "Skype",       NULL,       NULL,       1 << 0,       0,           0 },
-	{ "Slack",       NULL,       NULL,       1 << 0,       0,           0 },
-	{ "Mattermost",  NULL,       NULL,       1 << 0,       0,           0 },
-	{ "Thunderbird", NULL,       NULL,       1 << 8,       0,           0 },
+	/* class      instance   title  tags mask  isfloating   monitor  float x,y,w,h  floatborderpx*/
+	{ "Gimp",        NULL,   NULL,   0,        1,           -1 },
+	{ "Firefox",     NULL,   NULL,   1 << 0,   0,           1 },
+	{ "code-oss",    NULL,   NULL,   1 << 1,   0,           1 },
+	{ "SmartGit",    NULL,   NULL,   1 << 2,   0,           1 },
+	{ "Skype",       NULL,   NULL,   1 << 0,   0,           0 },
+	{ "Slack",       NULL,   NULL,   1 << 0,   0,           0 },
+	{ "Mattermost",  NULL,   NULL,   1 << 0,   0,           0 },
+	{ "Thunderbird", NULL,   NULL,   1 << 8,   0,           0 },
+	{ "floatingSt",  NULL,   NULL,   -1,       1,           -1,  1414,19,500,500,  1 },
 };
 
 /* layout(s) */
@@ -80,10 +81,11 @@ static Key keys[] = {
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_space,  zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    focusmon,       {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_Tab,    focusmon,       {.i = +1 } },
 	{ MODKEY,                       XK_Left,   focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_Right,  focusstack,     {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_Left,   tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_Right,  tagmon,         {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_Left,   tagmon,         {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_Right,  tagmon,         {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_Page_Up,incnmaster,     {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_Page_Down,incnmaster,   {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
