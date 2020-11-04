@@ -360,7 +360,7 @@ applyrules(Client *c)
 			c->tags |= r->tags;
 			c->floatborderpx = r->floatborderpx;
 			if (r->isfloating) {
-				c->x = r->floatx;
+				c->x = r->floatx + (c->mon->num * c->mon->mw);
 				c->y = r->floaty;
 				c->w = r->floatw;
 				c->h = r->floath;
