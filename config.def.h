@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 3;        /* border pixel of windows */
+static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -62,7 +62,7 @@ static const Layout layouts[] = {
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
+	{ MODKEY|Mod1Mask,              KEY,      tag,            {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
@@ -76,22 +76,22 @@ static const char *termcmd[]  = { "st", NULL };
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          SHCMD("start_app") },
-	{ MODKEY|ControlMask,           XK_d,      spawn,          {.v = dmenucmd } },
+	{ MODKEY|Mod1Mask,              XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_w,      spawn,          SHCMD("firefox") },
+	{ MODKEY|ControlMask,           XK_w,      spawn,          SHCMD("firefox  -private-window") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_space,  zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    focusmon,       {.i = -1 } },
-	{ MODKEY|ControlMask,           XK_Tab,    focusmon,       {.i = +1 } },
+	{ MODKEY|Mod1Mask,              XK_Tab,    focusmon,       {.i = +1 } },
 	{ MODKEY,                       XK_Left,   focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_Right,  focusstack,     {.i = -1 } },
-	{ MODKEY|ControlMask,           XK_Left,   tagmon,         {.i = -1 } },
-	{ MODKEY|ControlMask,           XK_Right,  tagmon,         {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_Page_Up,incnmaster,     {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_Page_Down,incnmaster,   {.i = -1 } },
+	{ MODKEY|Mod1Mask,              XK_Left,   tagmon,         {.i = -1 } },
+	{ MODKEY|Mod1Mask,              XK_Right,  tagmon,         {.i = +1 } },
+	{ MODKEY|Mod1Mask,              XK_Page_Up,incnmaster,     {.i = +1 } },
+	{ MODKEY|Mod1Mask,              XK_Page_Down,incnmaster,   {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY|ControlMask,           XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
@@ -99,7 +99,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_u,      setlayout,      {.v = &layouts[3]} },
 	{ MODKEY,                       XK_o,      setlayout,      {.v = &layouts[4]} },
-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
+	{ MODKEY|Mod1Mask,              XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
@@ -107,6 +107,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY,                       XK_p,      spawn,          SHCMD("display_switch") },
+	{ MODKEY,                       XK_minus,  spawn,          SHCMD("amixer set Master 5%-; kill -44 $(pidof dwmblocks); dwmblocks") },
+	{ MODKEY,                       XK_equal,  spawn,          SHCMD("amixer set Master 5%+; kill -44 $(pidof dwmblocks); dwmblocks") },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
