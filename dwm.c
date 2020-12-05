@@ -1877,7 +1877,6 @@ setup(void)
 	focus(NULL);
 }
 
-
 void
 seturgent(Client *c, int urg)
 {

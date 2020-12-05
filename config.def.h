@@ -75,11 +75,10 @@ static const char *termcmd[]  = { "st", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_d,      spawn,          SHCMD("start_app") },
-	{ MODKEY|Mod1Mask,              XK_d,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_w,      spawn,          SHCMD("firefox") },
-	{ MODKEY|ControlMask,           XK_w,      spawn,          SHCMD("firefox  -private-window") },
+	{ MODKEY,                       XK_w,      spawn,          SHCMD("$BROWSER") },
+	{ MODKEY|ControlMask,           XK_w,      spawn,          SHCMD("$BROWSER --incognito") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_space,  zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    focusmon,       {.i = -1 } },
@@ -107,6 +106,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY,                       XK_p,      spawn,          SHCMD("display_switch") },
+	{ 0,                            XK_Print,  spawn,          SHCMD("maim -i `xdotool getactivewindow` ~/Pictures/screenshot/pic-window-$(date '+%y%m%d-%H%M-%S').png") },
+	{ ShiftMask,                    XK_Print,  spawn,          SHCMD("maimpick") },
 	{ MODKEY,                       XK_minus,  spawn,          SHCMD("amixer set Master 5%-; kill -44 $(pidof dwmblocks); dwmblocks") },
 	{ MODKEY,                       XK_equal,  spawn,          SHCMD("amixer set Master 5%+; kill -44 $(pidof dwmblocks); dwmblocks") },
 	TAGKEYS(                        XK_1,                      0)
