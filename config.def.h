@@ -35,21 +35,19 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance   title  tags mask  isfloating   monitor  float x,y,w,h  floatborderpx*/
-	{ "Gimp",        NULL,   NULL,   0,        1,           -1 },
-	{ "Firefox",     NULL,   NULL,   1 << 0,   0,           1 },
 	{ "code-oss",    NULL,   NULL,   1 << 1,   0,           1 },
 	{ "SmartGit",    NULL,   NULL,   1 << 2,   0,           1 },
 	{ "Skype",       NULL,   NULL,   1 << 0,   0,           0 },
 	{ "Slack",       NULL,   NULL,   1 << 0,   0,           0 },
 	{ "Mattermost",  NULL,   NULL,   1 << 0,   0,           0 },
-	{ "Thunderbird", NULL,   NULL,   1 << 8,   0,           0 },
+	{ "Mailspring",  NULL,   NULL,   1 << 1,   0,           0 },
 	{ "floatingSt",  NULL,   NULL,   -1,       1,           -1,  1414,19,500,500,  1 },
 };
 
 /* layout(s) */
 static const float mfact     = 0.5; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -106,7 +104,7 @@ static Key keys[] = {
 	{ MODKEY|Mod1Mask,     XK_space,      togglefloating,  {0} },
 	{ MODKEY,              XK_0,          view,            {.ui = ~0 } },
 	{ MODKEY|ShiftMask,    XK_0,          tag,             {.ui = ~0 } },
-	{ MODKEY,              XK_p,          spawn,           SHCMD("display_switch") },
+	{ MODKEY|ControlMask,  XK_p,          spawn,           SHCMD("display_switch") },
 	{ 0,                   XK_Print,      spawn,           SHCMD("maim -i `xdotool getactivewindow` ~/Pictures/screenshot/pic-window-$(date '+%y%m%d-%H%M-%S').png") },
 	{ ShiftMask,           XK_Print,      spawn,           SHCMD("maimpick") },
 	{ MODKEY,              XK_equal,      spawn,           SHCMD("pamixer --allow-boost -i 5; kill -44 $(pidof dwmblocks); dwmblocks") },
