@@ -109,6 +109,8 @@ static Key keys[] = {
 	{ ShiftMask,           XK_Print,      spawn,           SHCMD("maimpick") },
 	{ MODKEY,              XK_equal,      spawn,           SHCMD("pamixer --allow-boost -i 5; kill -44 $(pidof dwmblocks); dwmblocks") },
 	{ MODKEY,              XK_minus,      spawn,           SHCMD("pamixer --allow-boost -d 5; kill -44 $(pidof dwmblocks); dwmblocks") },
+	{ MODKEY,              XK_F9,         spawn,           SHCMD("dmenumount") },
+	{ MODKEY,              XK_F10,        spawn,           SHCMD("dmenuumount") },
 	{ MODKEY|ShiftMask,    XK_q,          quit,            {0} },
 	TAGKEYS(               XK_2,          1)
 	TAGKEYS(               XK_3,          2)
