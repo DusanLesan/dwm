@@ -14,7 +14,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "monospace:size=10" };
 static const char dmenufont[]       = "monospace:size=10";
-static const char col_gray1[]       = "#222222";
+static const char col_gray1[]       = "#1e1e1e";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
@@ -41,7 +41,7 @@ static const Rule rules[] = {
 	{ "Slack",       NULL,   NULL,   1 << 0,   0,           0 },
 	{ "Mattermost",  NULL,   NULL,   1 << 0,   0,           0 },
 	{ "Mailspring",  NULL,   NULL,   1 << 1,   0,           0 },
-	{ "floatingSt",  NULL,   NULL,   -1,       1,           -1,  1414,19,500,500,  1 },
+	{ "floatingSt",  NULL,   NULL,   -1,       1,           -1,  1414,19,500,500,  2 },
 };
 
 /* layout(s) */
@@ -93,6 +93,9 @@ static Key keys[] = {
 	{ MODKEY|Mod1Mask,     XK_Right,      tagmon,          {.i = +1 } },
 	{ MODKEY|Mod1Mask,     XK_Page_Up,    incnmaster,      {.i = +1 } },
 	{ MODKEY|Mod1Mask,     XK_Page_Down,  incnmaster,      {.i = -1 } },
+	{ MODKEY|ControlMask,  XK_Page_Up,    setcfact,        {.f = +0.25} },
+	{ MODKEY|ControlMask,  XK_Page_Down,  setcfact,        {.f = -0.25} },
+	{ MODKEY|ControlMask,  XK_End,        setcfact,        {.f = 0.00} },
 	{ MODKEY,              XK_h,          setmfact,        {.f = -0.05} },
 	{ MODKEY,              XK_l,          setmfact,        {.f = +0.05} },
 	{ MODKEY,              XK_q,          killclient,      {0} },
@@ -111,6 +114,8 @@ static Key keys[] = {
 	{ MODKEY,              XK_minus,      spawn,           SHCMD("pamixer --allow-boost -d 5; kill -44 $(pidof dwmblocks); dwmblocks") },
 	{ MODKEY,              XK_F9,         spawn,           SHCMD("dmenumount") },
 	{ MODKEY,              XK_F10,        spawn,           SHCMD("dmenuumount") },
+	{ MODKEY|ShiftMask,    XK_l,          spawn,           SHCMD("slock || kill -9 -1") },
+	{ 0,                   XK_Pause,      spawn,           SHCMD("dunstctl set-paused toggle") },
 	{ MODKEY|ShiftMask,    XK_q,          quit,            {0} },
 	TAGKEYS(               XK_2,          1)
 	TAGKEYS(               XK_3,          2)
