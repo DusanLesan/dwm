@@ -1211,6 +1211,8 @@ keypress(XEvent *e)
 void
 killclient(const Arg *arg)
 {
+	Client *c = NULL, *i;
+
 	if (!selmon->sel)
 		return;
 	if (!sendevent(selmon->sel->win, wmatom[WMDelete], NoEventMask, wmatom[WMDelete], CurrentTime, 0 , 0, 0)) {
@@ -1221,6 +1223,21 @@ killclient(const Arg *arg)
 		XSync(dpy, False);
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
+	}
+
+	for (c = selmon->sel->next; c && !ISVISIBLE(c); c = c->next);
+	if (!c) {
+		for (i = selmon->clients; i != selmon->sel; i = i->next)
+			if (ISVISIBLE(i))
+				c = i;
+		if (!c)
+			for (; i; i = i->next)
+				if (ISVISIBLE(i))
+					c = i;
+	}
+	if (c) {
+		focus(c);
+		restack(selmon);
 	}
 }
 
