@@ -4,23 +4,23 @@
 #define TERMINAL "alacritty"
 
 /* appearance */
-static const unsigned int borderpx  = 2;        /* border pixel of windows */
-static const unsigned int snap      = 15;       /* snap pixel */
+static const unsigned int borderpx       = 2;   /* border pixel of windows */
+static const unsigned int snap           = 15;  /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
-static const int showsystray        = 1;     /* 0 means no systray */
-static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
-static const char col_gray1[]       = "#1e1e1e";
-static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
-static const char col_red[]         = "#ff0000";
-static const char *colors[][3]      = {
+static const int showsystray             = 1;   /* 0 means no systray */
+static const int showbar                 = 1;   /* 0 means no bar */
+static const int topbar                  = 1;   /* 0 means bottom bar */
+static const char *fonts[]               = { "monospace:size=10" };
+static const char dmenufont[]            = "monospace:size=10";
+static const char col_gray1[]            = "#1e1e1e";
+static const char col_gray2[]            = "#444444";
+static const char col_gray3[]            = "#bbbbbb";
+static const char col_gray4[]            = "#eeeeee";
+static const char col_cyan[]             = "#005577";
+static const char col_red[]              = "#ff0000";
+static const char *colors[][3]           = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan , col_red },
@@ -55,7 +55,6 @@ static const Layout layouts[] = {
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 	{ "|M|",      centeredmaster },
-	{ ">M>",      centeredfloatingmaster },
 };
 
 /* key definitions */
@@ -80,9 +79,15 @@ static Key keys[] = {
 	/* modifier            key            function         argument */
 	{ MODKEY,              XK_d,          spawn,           {.v = dmenucmd } },
 	{ MODKEY,              XK_Return,     spawn,           {.v = termcmd } },
-	{ MODKEY,              XK_w,          spawn,           SHCMD("$BROWSER") },
-	{ MODKEY|ControlMask,  XK_w,          spawn,           SHCMD("$BROWSER --incognito") },
 	{ MODKEY,              XK_f,          spawn,           SHCMD(TERMINAL " -e lf") },
+	{ MODKEY,              XK_F1,         spawn,           SHCMD("$BROWSER") },
+	{ MODKEY|ControlMask,  XK_F1,         spawn,           SHCMD("$BROWSER --incognito") },
+	{ MODKEY,              XK_F2,         spawn,           SHCMD("code") },
+	{ MODKEY,              XK_F3,         spawn,           SHCMD("smartgit") },
+	{ MODKEY,              XK_F4,         spawn,           SHCMD("insomnia") },
+	{ MODKEY,              XK_F5,         spawn,           SHCMD("rale") },
+	{ MODKEY,              XK_F8,         spawn,           SHCMD("comms") },
+	{ MODKEY|ShiftMask,    XK_F8,         spawn,           SHCMD("comms -q") },
 	{ MODKEY,              XK_b,          togglebar,       {0} },
 	{ MODKEY,              XK_space,      zoom,            {0} },
 	{ MODKEY|Mod1Mask,     XK_Tab,        focusmon,        {.i = -1 } },
@@ -103,7 +108,6 @@ static Key keys[] = {
 	{ MODKEY|Mod1Mask,     XK_f,          setlayout,       {.v = &layouts[1]} },
 	{ MODKEY|Mod1Mask,     XK_m,          setlayout,       {.v = &layouts[2]} },
 	{ MODKEY|Mod1Mask,     XK_u,          setlayout,       {.v = &layouts[3]} },
-	{ MODKEY|Mod1Mask,     XK_o,          setlayout,       {.v = &layouts[4]} },
 	{ MODKEY|Mod1Mask,     XK_space,      togglefloating,  {0} },
 	{ MODKEY,              XK_0,          view,            {.ui = ~0 } },
 	{ MODKEY|ShiftMask,    XK_0,          tag,             {.ui = ~0 } },
