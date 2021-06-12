@@ -19,7 +19,7 @@ static const char col_gray2[]            = "#444444";
 static const char col_gray3[]            = "#bbbbbb";
 static const char col_gray4[]            = "#eeeeee";
 static const char col_cyan[]             = "#005577";
-static const char col_red[]              = "#ff0000";
+static const char col_red[]              = "#A54242";
 static const char *colors[][3]           = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -37,10 +37,12 @@ static const Rule rules[] = {
 	/* class      instance   title  tags mask  isfloating   monitor  float x,y,w,h  floatborderpx*/
 	{ "code-oss",    NULL,   NULL,   1 << 1,   0,           1 },
 	{ "SmartGit",    NULL,   NULL,   1 << 2,   0,           1 },
+	{ "Insomnia",    NULL,   NULL,   1 << 3,   0,           1 },
+	{ "RALE",        NULL,   NULL,   1 << 4,   0,           1 },
 	{ "Skype",       NULL,   NULL,   1 << 0,   0,           0 },
 	{ "Slack",       NULL,   NULL,   1 << 0,   0,           0 },
 	{ "Mattermost",  NULL,   NULL,   1 << 0,   0,           0 },
-	{ "Mailspring",  NULL,   NULL,   1 << 1,   0,           0 },
+	{ "mpv",         NULL,   NULL,   0 << 0,   0,           1 },
 	{ "floatingSt",  NULL,   NULL,   -1,       1,           -1,  1414,19,500,500,  2 },
 };
 
@@ -79,15 +81,18 @@ static Key keys[] = {
 	/* modifier            key            function         argument */
 	{ MODKEY,              XK_d,          spawn,           {.v = dmenucmd } },
 	{ MODKEY,              XK_Return,     spawn,           {.v = termcmd } },
-	{ MODKEY,              XK_f,          spawn,           SHCMD(TERMINAL " -e lf") },
+	{ MODKEY,              XK_t,          spawn,           {.v = termcmd } },
+	{ MODKEY,              XK_f,          spawn,           SHCMD(TERMINAL " -e lfrun") },
 	{ MODKEY,              XK_F1,         spawn,           SHCMD("$BROWSER") },
 	{ MODKEY|ControlMask,  XK_F1,         spawn,           SHCMD("$BROWSER --incognito") },
+	{ MODKEY|Mod1Mask,     XK_F1,         spawn,           SHCMD("bookmarks") },
 	{ MODKEY,              XK_F2,         spawn,           SHCMD("code") },
 	{ MODKEY,              XK_F3,         spawn,           SHCMD("smartgit") },
 	{ MODKEY,              XK_F4,         spawn,           SHCMD("insomnia") },
-	{ MODKEY,              XK_F5,         spawn,           SHCMD("rale") },
+	{ MODKEY,              XK_F5,         spawn,           SHCMD("roku") },
 	{ MODKEY,              XK_F8,         spawn,           SHCMD("comms") },
 	{ MODKEY|ShiftMask,    XK_F8,         spawn,           SHCMD("comms -q") },
+	{ MODKEY,              XK_F12,        spawn,           SHCMD("dmenucalc") },
 	{ MODKEY,              XK_b,          togglebar,       {0} },
 	{ MODKEY,              XK_space,      zoom,            {0} },
 	{ MODKEY|Mod1Mask,     XK_Tab,        focusmon,        {.i = -1 } },
@@ -112,14 +117,16 @@ static Key keys[] = {
 	{ MODKEY,              XK_0,          view,            {.ui = ~0 } },
 	{ MODKEY|ShiftMask,    XK_0,          tag,             {.ui = ~0 } },
 	{ MODKEY|ControlMask,  XK_p,          spawn,           SHCMD("display_switch") },
+	{ MODKEY|ShiftMask,    XK_p,          spawn,           SHCMD("displayselect") },
 	{ 0,                   XK_Print,      spawn,           SHCMD("maim -i `xdotool getactivewindow` ~/Pictures/screenshot/pic-window-$(date '+%y%m%d-%H%M-%S').png") },
 	{ ShiftMask,           XK_Print,      spawn,           SHCMD("maimpick") },
-	{ MODKEY,              XK_equal,      spawn,           SHCMD("pamixer --allow-boost -i 5; kill -44 $(pidof dwmblocks); dwmblocks") },
-	{ MODKEY,              XK_minus,      spawn,           SHCMD("pamixer --allow-boost -d 5; kill -44 $(pidof dwmblocks); dwmblocks") },
+	{ MODKEY,              XK_equal,      spawn,           SHCMD("pamixer --allow-boost -i 5; kill -39 $(pidof dwmblocks)") },
+	{ MODKEY,              XK_minus,      spawn,           SHCMD("pamixer --allow-boost -d 5; kill -39 $(pidof dwmblocks)") },
 	{ MODKEY,              XK_F9,         spawn,           SHCMD("dmenumount") },
 	{ MODKEY,              XK_F10,        spawn,           SHCMD("dmenuumount") },
 	{ MODKEY|ShiftMask,    XK_l,          spawn,           SHCMD("slock || kill -9 -1") },
 	{ 0,                   XK_Pause,      spawn,           SHCMD("dunstctl set-paused toggle") },
+	{ ShiftMask,           XK_Pause,      spawn,           SHCMD("dunstctl history-pop") },
 	{ MODKEY|ShiftMask,    XK_q,          quit,            {0} },
 	TAGKEYS(               XK_2,          1)
 	TAGKEYS(               XK_3,          2)
@@ -130,10 +137,10 @@ static Key keys[] = {
 	TAGKEYS(               XK_7,          6)
 	TAGKEYS(               XK_8,          7)
 	TAGKEYS(               XK_9,          8)
-	{ 0,                   XF86XK_AudioPlay,         spawn,  SHCMD("(mpc toggle || mpd); kill -44 $(pidof dwmblocks); dwmblocks") },
-	{ 0,                   XF86XK_AudioMute,         spawn,  SHCMD("pamixer -t; kill -44 $(pidof dwmblocks); dwmblocks") },
-	{ 0,                   XF86XK_AudioRaiseVolume,  spawn,  SHCMD("pamixer --allow-boost -i 3; kill -44 $(pidof dwmblocks); dwmblocks") },
-	{ 0,                   XF86XK_AudioLowerVolume,  spawn,  SHCMD("pamixer --allow-boost -d 3; kill -44 $(pidof dwmblocks); dwmblocks") },
+	{ 0,                   XF86XK_AudioPlay,         spawn,  SHCMD("music") },
+	{ 0,                   XF86XK_AudioMute,         spawn,  SHCMD("pamixer -t; kill -39 $(pidof dwmblocks)") },
+	{ 0,                   XF86XK_AudioRaiseVolume,  spawn,  SHCMD("pamixer --allow-boost -i 3; kill -39 $(pidof dwmblocks)") },
+	{ 0,                   XF86XK_AudioLowerVolume,  spawn,  SHCMD("pamixer --allow-boost -d 3; kill -39 $(pidof dwmblocks)") },
 };
 
 /* button definitions */
