@@ -85,6 +85,7 @@ static Key keys[] = {
 	{ MODKEY,              XK_f,          spawn,           SHCMD(TERMINAL " -e lfrun") },
 	{ MODKEY,              XK_F1,         spawn,           SHCMD("$BROWSER") },
 	{ MODKEY|ControlMask,  XK_F1,         spawn,           SHCMD("$BROWSER --incognito") },
+	{ MODKEY|ShiftMask,    XK_F1,         spawn,           SHCMD("$BROWSER --tor") },
 	{ MODKEY|Mod1Mask,     XK_F1,         spawn,           SHCMD("bookmarks") },
 	{ MODKEY,              XK_F2,         spawn,           SHCMD("code") },
 	{ MODKEY,              XK_F3,         spawn,           SHCMD("smartgit") },
@@ -127,7 +128,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_l,          spawn,           SHCMD("slock || kill -9 -1") },
 	{ 0,                   XK_Pause,      spawn,           SHCMD("dunstctl set-paused toggle") },
 	{ ShiftMask,           XK_Pause,      spawn,           SHCMD("dunstctl history-pop") },
-	{ MODKEY|ShiftMask,    XK_q,          quit,            {0} },
+	{ MODKEY|ShiftMask,    XK_q,          spawn,           SHCMD("sysact") },
 	TAGKEYS(               XK_2,          1)
 	TAGKEYS(               XK_3,          2)
 	TAGKEYS(               XK_1,          0)
