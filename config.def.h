@@ -14,7 +14,7 @@ static const int showbar                 = 1;   /* 0 means no bar */
 static const int topbar                  = 1;   /* 0 means bottom bar */
 static const char *fonts[]               = { "monospace:size=10" };
 static const char dmenufont[]            = "monospace:size=10";
-static const char col_gray1[]            = "#1e1e1e";
+static const char col_gray1[]            = "#181818";
 static const char col_gray2[]            = "#444444";
 static const char col_gray3[]            = "#bbbbbb";
 static const char col_gray4[]            = "#eeeeee";
@@ -43,7 +43,7 @@ static const Rule rules[] = {
 	{ "Slack",       NULL,   NULL,   1 << 0,   0,           0 },
 	{ "Mattermost",  NULL,   NULL,   1 << 0,   0,           0 },
 	{ "mpv",         NULL,   NULL,   0 << 0,   0,           1 },
-	{ "floatingSt",  NULL,   NULL,   -1,       1,           -1,  1414,19,500,500,  2 },
+	{ "floating",    NULL,   NULL,   -1,       1,           -1,  1414,19,500,500,  2 },
 };
 
 /* layout(s) */
@@ -72,7 +72,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-n", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { TERMINAL, NULL };
 
 #include <X11/XF86keysym.h>
@@ -126,8 +126,10 @@ static Key keys[] = {
 	{ MODKEY,              XK_F9,         spawn,           SHCMD("dmenumount") },
 	{ MODKEY,              XK_F10,        spawn,           SHCMD("dmenuumount") },
 	{ MODKEY|ShiftMask,    XK_l,          spawn,           SHCMD("slock || kill -9 -1") },
-	{ 0,                   XK_Pause,      spawn,           SHCMD("dunstctl set-paused toggle") },
+	{ 0,                   XK_Pause,      spawn,           SHCMD("dunstctl close") },
+	{ MODKEY,              XK_Pause,      spawn,           SHCMD("dunstctl set-paused toggle") },
 	{ ShiftMask,           XK_Pause,      spawn,           SHCMD("dunstctl history-pop") },
+	{ ControlMask,         XK_Pause,      spawn,           SHCMD("dunst_config") },
 	{ MODKEY|ShiftMask,    XK_q,          spawn,           SHCMD("sysact") },
 	TAGKEYS(               XK_2,          1)
 	TAGKEYS(               XK_3,          2)
