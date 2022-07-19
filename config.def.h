@@ -101,6 +101,8 @@ static Key keys[] = {
 	{ MODKEY,              XK_Tab,        focusmon,        {.i = +1 } },
 	{ MODKEY,              XK_Left,       focusstack,      {.i = -1 } },
 	{ MODKEY,              XK_Right,      focusstack,      {.i = +1 } },
+	{ MODKEY,              XK_Up,         pushup,         {0} },
+	{ MODKEY,              XK_Down,       pushdown,       {0} },
 	{ MODKEY|Mod1Mask,     XK_Left,       tagmon,          {.i = -1 } },
 	{ MODKEY|Mod1Mask,     XK_Right,      tagmon,          {.i = +1 } },
 	{ MODKEY|Mod1Mask,     XK_Page_Up,    incnmaster,      {.i = +1 } },
