@@ -148,9 +148,9 @@ static Key keys[] = {
 	TAGKEYS(               XK_8,          7)
 	TAGKEYS(               XK_9,          8)
 	{ 0,                   XF86XK_AudioPlay,         spawn,  SHCMD("music") },
-	{ 0,                   XF86XK_AudioMute,         spawn,  SHCMD("pamixer -t; kill -39 $(pidof dwmblocks)") },
-	{ 0,                   XF86XK_AudioRaiseVolume,  spawn,  SHCMD("pamixer --allow-boost -i 3; kill -39 $(pidof dwmblocks)") },
-	{ 0,                   XF86XK_AudioLowerVolume,  spawn,  SHCMD("pamixer --allow-boost -d 3; kill -39 $(pidof dwmblocks)") },
+	{ 0,                   XF86XK_AudioMute,         spawn,  SHCMD("BLOCK_BUTTON=3 volume") },
+	{ 0,                   XF86XK_AudioRaiseVolume,  spawn,  SHCMD("BLOCK_BUTTON=4 volume") },
+	{ 0,                   XF86XK_AudioLowerVolume,  spawn,  SHCMD("BLOCK_BUTTON=5 volume") },
 };
 
 /* button definitions */
