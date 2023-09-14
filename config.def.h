@@ -13,8 +13,8 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray             = 1;   /* 0 means no systray */
 static const int showbar                 = 1;   /* 0 means no bar */
 static const int topbar                  = 1;   /* 0 means bottom bar */
-static const char *fonts[]               = { "monospace:size=10" };
-static const char dmenufont[]            = "monospace:size=10";
+static const char *fonts[]               = { "monospace:size=9" };
+static const char dmenufont[]            = "monospace:size=9";
 static const char col_gray1[]            = "#181818";
 static const char col_gray2[]            = "#444444";
 static const char col_gray3[]            = "#bbbbbb";
@@ -35,17 +35,15 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance   title  tags mask  isfloating   monitor  float x,y,w,h  floatborderpx*/
-	{ "code-oss",    NULL,   NULL,   1 << 1,   0,           1 },
-	{ "git",         NULL,   NULL,   1 << 2,   0,           1 },
-	{ "Insomnia",    NULL,   NULL,   1 << 3,   0,           1 },
-	{ "RALE",        NULL,   NULL,   1 << 4,   0,           1 },
-	{ "Slack",       NULL,   NULL,   1 << 0,   0,           0 },
-	{ "Skype",       NULL,   NULL,   1 << 1,   0,           0 },
-	{ "Mattermost",  NULL,   NULL,   1 << 1,   0,           0 },
-	{ "mpv",         NULL,   NULL,   0 << 0,   0,           1 },
-	{ "Steam",       NULL,   NULL,   0 << 0,   0,           0 },
-	{ "floating",    NULL,   NULL,   -1,       1,           -1,  1414,19,500,500,  2 },
+	/* class      instance   title               tags mask isfloating   monitor  float x,y,w,h  floatborderpx*/
+	{ NULL,          NULL,   "Untitled - Brave", 1 << 0,   0,           2 },
+	{ "code-oss",    NULL,   NULL,               1 << 1,   0,           2 },
+	{ "git",         NULL,   NULL,               1 << 2,   0,           2 },
+	{ "Insomnia",    NULL,   NULL,               1 << 3,   0,           2 },
+	{ "RALE",        NULL,   NULL,               1 << 4,   0,           2 },
+	{ "mpv",         NULL,   NULL,               0 << 0,   0,           2 },
+	{ "Slack",       NULL,   NULL,               1 << 0,   0,           0 },
+	{ "floating",    NULL,   NULL,               -1,       1,           -1,      1414,19,500,500,  2 },
 };
 
 /* layout(s) */
@@ -65,10 +63,11 @@ static const Layout layouts[] = {
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
-	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-	{ MODKEY|Mod1Mask,              KEY,      tag,            {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+	{ MODKEY,                      KEY,      view,           {.ui = 1 << TAG} }, \
+	{ MODKEY|Mod1Mask,             KEY,      tag,            {.ui = 1 << TAG} }, \
+	{ MODKEY|ControlMask,          KEY,      toggleview,     {.ui = 1 << TAG} }, \
+	{ MODKEY|ControlMask|Mod1Mask, KEY,      toggletag,      {.ui = 1 << TAG} },
+
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -86,29 +85,34 @@ static Key keys[] = {
 	/* modifier            key            function         argument */
 	{ MODKEY,              XK_d,          spawn,           {.v = dmenucmd } },
 	{ MODKEY,              XK_Return,     spawn,           {.v = termcmd } },
-	{ MODKEY,              XK_t,          spawn,           {.v = termcmd } },
 	{ MODKEY,              XK_f,          spawn,           SHCMD("_START_LFCD=1 " TERMINAL) },
-	{ MODKEY,              XK_F1,         spawn,           SHCMD("$BROWSER") },
-	{ MODKEY|ControlMask,  XK_F1,         spawn,           SHCMD("$BROWSER --incognito") },
-	{ MODKEY|ShiftMask,    XK_F1,         spawn,           SHCMD("$BROWSER --tor") },
-	{ MODKEY|Mod1Mask,     XK_F1,         spawn,           SHCMD("bookmarks") },
-	{ MODKEY,              XK_F2,         spawn,           SHCMD("code") },
-	{ MODKEY,              XK_F3,         spawn,           SHCMD("alacritty --class git -e lazygit") },
-	{ MODKEY,              XK_F4,         spawn,           SHCMD("insomnia") },
-	{ MODKEY,              XK_F5,         spawn,           SHCMD("roku") },
+	{ MODKEY,              XK_n,          spawn,           SHCMD("$BROWSER") },
+	{ MODKEY|ControlMask,  XK_n,          spawn,           SHCMD("$BROWSER --incognito") },
+	{ MODKEY|ShiftMask,    XK_n,          spawn,           SHCMD("$BROWSER --tor") },
+	{ MODKEY|Mod1Mask,     XK_n,          spawn,           SHCMD("bookmarks") },
+	{ MODKEY,              XK_m,          spawn,           SHCMD("code") },
+	{ MODKEY,              XK_comma,      spawn,           SHCMD("alacritty --class git -e lazygit") },
+	{ MODKEY,              XK_period,     spawn,           SHCMD("insomnia") },
+	{ MODKEY,              XK_slash,      spawn,           SHCMD("roku") },
 	{ MODKEY,              XK_F8,         spawn,           SHCMD("comms") },
 	{ MODKEY|ShiftMask,    XK_F8,         spawn,           SHCMD("comms -q") },
 	{ MODKEY,              XK_F12,        spawn,           SHCMD("dmenucalc") },
 	{ MODKEY,              XK_b,          togglebar,       {0} },
 	{ MODKEY,              XK_space,      zoom,            {0} },
-	{ MODKEY|Mod1Mask,     XK_Tab,        focusmon,        {.i = -1 } },
 	{ MODKEY,              XK_Tab,        focusmon,        {.i = +1 } },
+	{ MODKEY,              XK_j,          focusstack,      {.i = +1 } },
+	{ MODKEY,              XK_k,          focusstack,      {.i = -1 } },
+	{ MODKEY|Mod1Mask,     XK_j,          tagmon,          {.i = +1 } },
+	{ MODKEY|Mod1Mask,     XK_k,          tagmon,          {.i = -1 } },
+	{ MODKEY|ControlMask,  XK_j,          focusmon,        {.i = +1 } },
+	{ MODKEY|ControlMask,  XK_k,          focusmon,        {.i = -1 } },
+	{ MODKEY,              XK_h,          pushup,          {0} },
+	{ MODKEY,              XK_l,          pushdown,        {0} },
 	{ MODKEY,              XK_Left,       focusstack,      {.i = -1 } },
 	{ MODKEY,              XK_Right,      focusstack,      {.i = +1 } },
 	{ MODKEY,              XK_Up,         pushup,          {0} },
 	{ MODKEY,              XK_Down,       pushdown,        {0} },
-	{ MODKEY|Mod1Mask,     XK_Left,       tagmon,          {.i = -1 } },
-	{ MODKEY|Mod1Mask,     XK_Right,      tagmon,          {.i = +1 } },
+	{ MODKEY|Mod1Mask,     XK_Tab,        tagmon,          {.i = -1 } },
 	{ MODKEY|Mod1Mask,     XK_Page_Up,    incnmaster,      {.i = +1 } },
 	{ MODKEY|Mod1Mask,     XK_Page_Down,  incnmaster,      {.i = -1 } },
 	{ MODKEY|ControlMask,  XK_End,        setcfact,        {.f = 0.00} },
@@ -116,7 +120,7 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,  XK_Down,       setcfact,        {.f = -0.25} },
 	{ MODKEY|ControlMask,  XK_Left,       setmfact,        {.f = -0.03} },
 	{ MODKEY|ControlMask,  XK_Right,      setmfact,        {.f = +0.03} },
-	{ MODKEY,              XK_q,          killclient,      {0} },
+	{ MODKEY,              XK_z,          killclient,      {0} },
 	{ MODKEY|Mod1Mask,     XK_t,          setlayout,       {.v = &layouts[0]} },
 	{ MODKEY|Mod1Mask,     XK_f,          setlayout,       {.v = &layouts[1]} },
 	{ MODKEY|Mod1Mask,     XK_m,          setlayout,       {.v = &layouts[2]} },
@@ -138,15 +142,24 @@ static Key keys[] = {
 	{ ShiftMask,           XK_Pause,      spawn,           SHCMD("dunstctl history-pop") },
 	{ ControlMask,         XK_Pause,      spawn,           SHCMD("dunst_config") },
 	{ MODKEY|ShiftMask,    XK_q,          spawn,           SHCMD("sysact") },
+	TAGKEYS(               XK_1,          0)
 	TAGKEYS(               XK_2,          1)
 	TAGKEYS(               XK_3,          2)
-	TAGKEYS(               XK_1,          0)
 	TAGKEYS(               XK_4,          3)
 	TAGKEYS(               XK_5,          4)
 	TAGKEYS(               XK_6,          5)
 	TAGKEYS(               XK_7,          6)
 	TAGKEYS(               XK_8,          7)
 	TAGKEYS(               XK_9,          8)
+	TAGKEYS(               XK_q,          0)
+	TAGKEYS(               XK_w,          1)
+	TAGKEYS(               XK_e,          2)
+	TAGKEYS(               XK_r,          3)
+	TAGKEYS(               XK_t,          4)
+	TAGKEYS(               XK_y,          5)
+	TAGKEYS(               XK_u,          6)
+	TAGKEYS(               XK_i,          7)
+	TAGKEYS(               XK_o,          8)
 	{ 0,                   XF86XK_AudioPlay,         spawn,  SHCMD("music") },
 	{ 0,                   XF86XK_AudioMute,         spawn,  SHCMD("BLOCK_BUTTON=3 volume") },
 	{ 0,                   XF86XK_AudioRaiseVolume,  spawn,  SHCMD("BLOCK_BUTTON=4 volume") },
