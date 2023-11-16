@@ -41,7 +41,6 @@ static const Rule rules[] = {
 	{ "git",         NULL,   NULL,               1 << 2,   0,           2 },
 	{ "Insomnia",    NULL,   NULL,               1 << 3,   0,           2 },
 	{ "RALE",        NULL,   NULL,               1 << 4,   0,           2 },
-	{ "mpv",         NULL,   NULL,               0 << 0,   0,           2 },
 	{ "Slack",       NULL,   NULL,               1 << 0,   0,           0 },
 	{ "floating",    NULL,   NULL,               -1,       1,           -1,      1414,19,500,500,  2 },
 };
@@ -63,11 +62,11 @@ static const Layout layouts[] = {
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
-	{ MODKEY,                      KEY,      view,           {.ui = 1 << TAG} }, \
-	{ MODKEY|Mod1Mask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask,          KEY,      toggleview,     {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|Mod1Mask, KEY,      toggletag,      {.ui = 1 << TAG} },
-
+	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
+	{ MODKEY|Mod1Mask,              KEY,      tag,            {.ui = 1 << TAG} }, \
+	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
+	{ MODKEY|ControlMask|Mod1Mask,  KEY,      toggletag,      {.ui = 1 << TAG} }, \
+	{ MODKEY|ControlMask|ShiftMask, KEY,      spawn,          { .v = (const char*[]){ "display_toggle", (const char[]){ TAG + '0', '\0' }, NULL } } },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -129,7 +128,7 @@ static Key keys[] = {
 	{ MODKEY,              XK_0,          view,            {.ui = ~0 } },
 	{ MODKEY|ShiftMask,    XK_0,          tag,             {.ui = ~0 } },
 	{ MODKEY|ControlMask,  XK_p,          spawn,           SHCMD("display_switch") },
-	{ MODKEY|ShiftMask,    XK_p,          spawn,           SHCMD("displayselect") },
+	{ MODKEY|ShiftMask,    XK_p,          spawn,           SHCMD("display_select") },
 	{ 0,                   XK_Print,      spawn,           SHCMD("maimpick -a") },
 	{ ShiftMask,           XK_Print,      spawn,           SHCMD("maimpick") },
 	{ MODKEY,              XK_equal,      spawn,           SHCMD("pamixer --allow-boost -i 5; kill -39 $(pidof dwmblocks)") },
