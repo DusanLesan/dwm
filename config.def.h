@@ -66,7 +66,7 @@ static const Layout layouts[] = {
 	{ MODKEY|Mod1Mask,              KEY,      tag,            {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|Mod1Mask,  KEY,      toggletag,      {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|ShiftMask, KEY,      spawn,          { .v = (const char*[]){ "display_toggle", (const char[]){ TAG + '0', '\0' }, NULL } } },
+	{ MODKEY|ControlMask|ShiftMask, KEY,      spawn,          { .v = (const char*[]){ "display-toggle", (const char[]){ TAG + '0', '\0' }, NULL } } },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -127,8 +127,8 @@ static Key keys[] = {
 	{ MODKEY|Mod1Mask,     XK_space,      togglefloating,  {0} },
 	{ MODKEY,              XK_0,          view,            {.ui = ~0 } },
 	{ MODKEY|ShiftMask,    XK_0,          tag,             {.ui = ~0 } },
-	{ MODKEY|ControlMask,  XK_p,          spawn,           SHCMD("display_switch") },
-	{ MODKEY|ShiftMask,    XK_p,          spawn,           SHCMD("display_select") },
+	{ MODKEY|ControlMask,  XK_p,          spawn,           SHCMD("display-switch") },
+	{ MODKEY|ShiftMask,    XK_p,          spawn,           SHCMD("display-select") },
 	{ 0,                   XK_Print,      spawn,           SHCMD("maimpick -a") },
 	{ ShiftMask,           XK_Print,      spawn,           SHCMD("maimpick") },
 	{ MODKEY,              XK_equal,      spawn,           SHCMD("pamixer --allow-boost -i 5; kill -39 $(pidof dwmblocks)") },
@@ -139,7 +139,7 @@ static Key keys[] = {
 	{ 0,                   XK_Pause,      spawn,           SHCMD("dunstctl close") },
 	{ MODKEY,              XK_Pause,      spawn,           SHCMD("dunstctl set-paused toggle") },
 	{ ShiftMask,           XK_Pause,      spawn,           SHCMD("dunstctl history-pop") },
-	{ ControlMask,         XK_Pause,      spawn,           SHCMD("dunst_config") },
+	{ ControlMask,         XK_Pause,      spawn,           SHCMD("dunst-config") },
 	{ MODKEY|ShiftMask,    XK_q,          spawn,           SHCMD("sysact") },
 	TAGKEYS(               XK_1,          0)
 	TAGKEYS(               XK_2,          1)
