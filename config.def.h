@@ -36,6 +36,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance   title               tags mask isfloating   monitor  float x,y,w,h  floatborderpx*/
+	{ NULL,          NULL,   "pipe:",            1 << 0,   0,           1 },
 	{ NULL,          NULL,   "Untitled - Brave", 1 << 0,   0,           2 },
 	{ "code-oss",    NULL,   NULL,               1 << 1,   0,           2 },
 	{ "git",         NULL,   NULL,               1 << 2,   0,           2 },
@@ -136,7 +137,6 @@ static Key keys[] = {
 	{ MODKEY,              XK_F9,         spawn,           SHCMD("dmenumount") },
 	{ MODKEY,              XK_F10,        spawn,           SHCMD("dmenuumount") },
 	{ MODKEY|ShiftMask,    XK_l,          spawn,           SHCMD("slock || kill -9 -1") },
-	{ 0,                   XK_Pause,      spawn,           SHCMD("dunstctl close") },
 	{ MODKEY,              XK_Pause,      spawn,           SHCMD("dunstctl set-paused toggle") },
 	{ ShiftMask,           XK_Pause,      spawn,           SHCMD("dunstctl history-pop") },
 	{ ControlMask,         XK_Pause,      spawn,           SHCMD("dunst-config") },
@@ -159,7 +159,9 @@ static Key keys[] = {
 	TAGKEYS(               XK_u,          6)
 	TAGKEYS(               XK_i,          7)
 	TAGKEYS(               XK_o,          8)
-	{ 0,                   XF86XK_AudioPlay,         spawn,  SHCMD("music") },
+	{ 0,                   XF86XK_AudioPlay,         spawn,  SHCMD("mpdup") },
+	{ 0,                   XF86XK_AudioNext,         spawn,  SHCMD("mpc next") },
+	{ 0,                   XF86XK_AudioPrev,         spawn,  SHCMD("mpc prev") },
 	{ 0,                   XF86XK_AudioMute,         spawn,  SHCMD("BLOCK_BUTTON=3 volume") },
 	{ 0,                   XF86XK_AudioRaiseVolume,  spawn,  SHCMD("BLOCK_BUTTON=4 volume") },
 	{ 0,                   XF86XK_AudioLowerVolume,  spawn,  SHCMD("BLOCK_BUTTON=5 volume") },
