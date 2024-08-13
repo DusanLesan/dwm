@@ -59,4 +59,4 @@ noborder
 cfacts
 push
 dragfact (bakkeby)
-placemouse (bakkeby)
+tiledmove

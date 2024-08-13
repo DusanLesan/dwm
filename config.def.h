@@ -159,9 +159,11 @@ static Key keys[] = {
 	TAGKEYS(               XK_u,          6)
 	TAGKEYS(               XK_i,          7)
 	TAGKEYS(               XK_o,          8)
-	{ 0,                   XF86XK_AudioPlay,         spawn,  SHCMD("mpdup") },
-	{ 0,                   XF86XK_AudioNext,         spawn,  SHCMD("mpc next") },
-	{ 0,                   XF86XK_AudioPrev,         spawn,  SHCMD("mpc prev") },
+	{ 0,                   XF86XK_AudioPlay,         spawn,  SHCMD("media-control Play") },
+	{ 0,                   XF86XK_AudioPause,        spawn,  SHCMD("media-control Pause") },
+	{ 0,                   XF86XK_AudioStop,         spawn,  SHCMD("media-control Pause") },
+	{ 0,                   XF86XK_AudioNext,         spawn,  SHCMD("media-control Next") },
+	{ 0,                   XF86XK_AudioPrev,         spawn,  SHCMD("media-control Previous") },
 	{ 0,                   XF86XK_AudioMute,         spawn,  SHCMD("BLOCK_BUTTON=3 volume") },
 	{ 0,                   XF86XK_AudioRaiseVolume,  spawn,  SHCMD("BLOCK_BUTTON=4 volume") },
 	{ 0,                   XF86XK_AudioLowerVolume,  spawn,  SHCMD("BLOCK_BUTTON=5 volume") },
@@ -180,7 +182,7 @@ static Button buttons[] = {
 	{ ClkStatusText,   0,                Button4,   sigstatusbar,     {.i = 4} },
 	{ ClkStatusText,   0,                Button5,   sigstatusbar,     {.i = 5} },
 	{ ClkStatusText,   ShiftMask,        Button1,   sigstatusbar,     {.i = 6} },
-	{ ClkClientWin,    MODKEY,           Button1,   moveorplace,      {.i = 1} },
+	{ ClkClientWin,    MODKEY,           Button1,   movemouse,        {0} },
 	{ ClkClientWin,    MODKEY,           Button2,   togglefloating,   {0} },
 	{ ClkClientWin,    MODKEY,           Button3,   resizeorfacts,    {0} },
 	{ ClkClientWin,    MODKEY|ShiftMask, Button3,   resizemouse,      {0} },
