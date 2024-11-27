@@ -273,6 +273,7 @@ static void updatetitle(Client *c);
 static void updatewindowtype(Client *c);
 static void updatewmhints(Client *c);
 static void view(const Arg *arg);
+static void warp(const Client *c);
 static Client *wintoclient(Window w);
 static Monitor *wintomon(Window w);
 static Client *wintosystrayicon(Window w);
@@ -1072,6 +1073,7 @@ focusmon(const Arg *arg)
 	unfocus(selmon->sel, 0);
 	selmon = m;
 	focus(NULL);
+	warp(selmon->sel);
 }
 
 void
@@ -1516,7 +1518,7 @@ movemouse(const Arg *arg)
 
 				if (cc) {
 					Client *cl1, *cl2, ocl1;
-					
+
 					if (!selmon->lt[selmon->sellt]->arrange) return;
 
 					cl1 = c;
@@ -1528,19 +1530,19 @@ movemouse(const Arg *arg)
 					cl1->y = cl2->y;
 					cl1->w = cl2->w;
 					cl1->h = cl2->h;
-					
+
 					cl2->win = ocl1.win;
 					strcpy(cl2->name, ocl1.name);
 					cl2->x = ocl1.x;
 					cl2->y = ocl1.y;
 					cl2->w = ocl1.w;
 					cl2->h = ocl1.h;
-					
+
 					selmon->sel = cl2;
 
 					c = cc;
 					focus(c);
-					
+
 					arrange(cl1->mon);
 				}
 			}
@@ -1844,6 +1846,8 @@ restack(Monitor *m)
 				wc.sibling = c->win;
 			}
 	}
+	if (m == selmon && (m->tagset[m->seltags] & m->sel->tags) && m->lt[m->sellt]->arrange != &monocle)
+		warp(m->sel);
 	XSync(dpy, False);
 	while (XCheckMaskEvent(dpy, EnterWindowMask, &ev));
 }
@@ -2195,6 +2199,7 @@ tag(const Arg *arg)
 		focus(NULL);
 		arrange(selmon);
 	}
+	view(arg);
 }
 
 void
@@ -2203,6 +2208,7 @@ tagmon(const Arg *arg)
 	if (!selmon->sel || !mons->next)
 		return;
 	sendmon(selmon->sel, dirtomon(arg->i));
+	focusmon(arg);
 }
 
 void
@@ -2797,6 +2803,28 @@ view(const Arg *arg)
 
 	focus(NULL);
 	arrange(selmon);
+}
+
+void
+warp(const Client *c)
+{
+	int x, y;
+
+	if (!c) {
+		XWarpPointer(dpy, None, root, 0, 0, 0, 0, selmon->wx + selmon->ww / 2, selmon->wy + selmon->wh / 2);
+		return;
+	}
+
+	if (!getrootptr(&x, &y) ||
+		(x > c->x - c->bw &&
+		 y > c->y - c->bw &&
+		 x < c->x + c->w + c->bw*2 &&
+		 y < c->y + c->h + c->bw*2) ||
+		(y > c->mon->by && y < c->mon->by + bh) ||
+		(c->mon->topbar && !y))
+		return;
+
+	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
 }
 
 Client *

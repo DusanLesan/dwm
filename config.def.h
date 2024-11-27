@@ -69,6 +69,15 @@ static const Layout layouts[] = {
 	{ MODKEY|ControlMask|Mod1Mask,  KEY,      toggletag,      {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      spawn,          { .v = (const char*[]){ "display-toggle", (const char[]){ TAG + '0', '\0' }, NULL } } },
 
+#define MAP(MOD, KEY_PAIR, FUNC, ARG) \
+	{ MOD, KEY_PAIR[0], FUNC, ARG }, \
+	{ MOD, KEY_PAIR[1], FUNC, ARG }
+
+static const KeySym left[] = { XK_Left, XK_h };
+static const KeySym right[] = { XK_Right, XK_l };
+static const KeySym down[] = { XK_Down, XK_j };
+static const KeySym up[] = { XK_Up, XK_k };
+
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
@@ -82,91 +91,87 @@ static const char *termcmd[]  = { TERMINAL, NULL };
 #include <X11/XF86keysym.h>
 
 static Key keys[] = {
-	/* modifier            key            function         argument */
-	{ MODKEY,              XK_d,          spawn,           {.v = dmenucmd } },
-	{ MODKEY,              XK_Return,     spawn,           {.v = termcmd } },
-	{ MODKEY,              XK_f,          spawn,           SHCMD("_START_LFCD=1 " TERMINAL) },
-	{ MODKEY,              XK_n,          spawn,           SHCMD("$BROWSER") },
-	{ MODKEY|ControlMask,  XK_n,          spawn,           SHCMD("$BROWSER --incognito") },
-	{ MODKEY|ShiftMask,    XK_n,          spawn,           SHCMD("$BROWSER --tor") },
-	{ MODKEY|Mod1Mask,     XK_n,          spawn,           SHCMD("bookmarks") },
-	{ MODKEY,              XK_m,          spawn,           SHCMD("code") },
-	{ MODKEY,              XK_comma,      spawn,           SHCMD("alacritty --class git -e lazygit") },
-	{ MODKEY,              XK_period,     spawn,           SHCMD("insomnia") },
-	{ MODKEY,              XK_slash,      spawn,           SHCMD("roku") },
-	{ MODKEY,              XK_F8,         spawn,           SHCMD("comms") },
-	{ MODKEY|ShiftMask,    XK_F8,         spawn,           SHCMD("comms -q") },
-	{ MODKEY,              XK_F12,        spawn,           SHCMD("dmenucalc") },
-	{ MODKEY,              XK_b,          togglebar,       {0} },
-	{ MODKEY,              XK_space,      zoom,            {0} },
-	{ MODKEY,              XK_Tab,        focusmon,        {.i = +1 } },
-	{ MODKEY,              XK_j,          focusstack,      {.i = +1 } },
-	{ MODKEY,              XK_k,          focusstack,      {.i = -1 } },
-	{ MODKEY|Mod1Mask,     XK_j,          tagmon,          {.i = +1 } },
-	{ MODKEY|Mod1Mask,     XK_k,          tagmon,          {.i = -1 } },
-	{ MODKEY|ControlMask,  XK_j,          focusmon,        {.i = +1 } },
-	{ MODKEY|ControlMask,  XK_k,          focusmon,        {.i = -1 } },
-	{ MODKEY,              XK_h,          pushup,          {0} },
-	{ MODKEY,              XK_l,          pushdown,        {0} },
-	{ MODKEY,              XK_Left,       focusstack,      {.i = -1 } },
-	{ MODKEY,              XK_Right,      focusstack,      {.i = +1 } },
-	{ MODKEY,              XK_Up,         pushup,          {0} },
-	{ MODKEY,              XK_Down,       pushdown,        {0} },
-	{ MODKEY|Mod1Mask,     XK_Tab,        tagmon,          {.i = -1 } },
-	{ MODKEY|Mod1Mask,     XK_Page_Up,    incnmaster,      {.i = +1 } },
-	{ MODKEY|Mod1Mask,     XK_Page_Down,  incnmaster,      {.i = -1 } },
-	{ MODKEY|ControlMask,  XK_End,        setcfact,        {.f = 0.00} },
-	{ MODKEY|ControlMask,  XK_Up,         setcfact,        {.f = +0.25} },
-	{ MODKEY|ControlMask,  XK_Down,       setcfact,        {.f = -0.25} },
-	{ MODKEY|ControlMask,  XK_Left,       setmfact,        {.f = -0.03} },
-	{ MODKEY|ControlMask,  XK_Right,      setmfact,        {.f = +0.03} },
-	{ MODKEY,              XK_z,          killclient,      {0} },
-	{ MODKEY|Mod1Mask,     XK_t,          setlayout,       {.v = &layouts[0]} },
-	{ MODKEY|Mod1Mask,     XK_f,          setlayout,       {.v = &layouts[1]} },
-	{ MODKEY|Mod1Mask,     XK_m,          setlayout,       {.v = &layouts[2]} },
-	{ MODKEY|Mod1Mask,     XK_u,          setlayout,       {.v = &layouts[3]} },
-	{ MODKEY|Mod1Mask,     XK_space,      togglefloating,  {0} },
-	{ MODKEY,              XK_0,          view,            {.ui = ~0 } },
-	{ MODKEY|ShiftMask,    XK_0,          tag,             {.ui = ~0 } },
-	{ MODKEY|ControlMask,  XK_p,          spawn,           SHCMD("display-switch") },
-	{ MODKEY|ShiftMask,    XK_p,          spawn,           SHCMD("display-select") },
-	{ 0,                   XK_Print,      spawn,           SHCMD("maimpick -a") },
-	{ ShiftMask,           XK_Print,      spawn,           SHCMD("maimpick") },
-	{ MODKEY,              XK_equal,      spawn,           SHCMD("pamixer --allow-boost -i 5; kill -39 $(pidof dwmblocks)") },
-	{ MODKEY,              XK_minus,      spawn,           SHCMD("pamixer --allow-boost -d 5; kill -39 $(pidof dwmblocks)") },
-	{ MODKEY,              XK_F9,         spawn,           SHCMD("dmenumount") },
-	{ MODKEY,              XK_F10,        spawn,           SHCMD("dmenuumount") },
-	{ MODKEY|ShiftMask,    XK_l,          spawn,           SHCMD("slock || kill -9 -1") },
-	{ MODKEY,              XK_Pause,      spawn,           SHCMD("dunstctl set-paused toggle") },
-	{ ShiftMask,           XK_Pause,      spawn,           SHCMD("dunstctl history-pop") },
-	{ ControlMask,         XK_Pause,      spawn,           SHCMD("dunst-config") },
-	{ MODKEY|ShiftMask,    XK_q,          spawn,           SHCMD("sysact") },
-	TAGKEYS(               XK_1,          0)
-	TAGKEYS(               XK_2,          1)
-	TAGKEYS(               XK_3,          2)
-	TAGKEYS(               XK_4,          3)
-	TAGKEYS(               XK_5,          4)
-	TAGKEYS(               XK_6,          5)
-	TAGKEYS(               XK_7,          6)
-	TAGKEYS(               XK_8,          7)
-	TAGKEYS(               XK_9,          8)
-	TAGKEYS(               XK_q,          0)
-	TAGKEYS(               XK_w,          1)
-	TAGKEYS(               XK_e,          2)
-	TAGKEYS(               XK_r,          3)
-	TAGKEYS(               XK_t,          4)
-	TAGKEYS(               XK_y,          5)
-	TAGKEYS(               XK_u,          6)
-	TAGKEYS(               XK_i,          7)
-	TAGKEYS(               XK_o,          8)
-	{ 0,                   XF86XK_AudioPlay,         spawn,  SHCMD("media-control Play") },
-	{ 0,                   XF86XK_AudioPause,        spawn,  SHCMD("media-control Pause") },
-	{ 0,                   XF86XK_AudioStop,         spawn,  SHCMD("media-control Pause") },
-	{ 0,                   XF86XK_AudioNext,         spawn,  SHCMD("media-control Next") },
-	{ 0,                   XF86XK_AudioPrev,         spawn,  SHCMD("media-control Previous") },
-	{ 0,                   XF86XK_AudioMute,         spawn,  SHCMD("BLOCK_BUTTON=3 volume") },
-	{ 0,                   XF86XK_AudioRaiseVolume,  spawn,  SHCMD("BLOCK_BUTTON=4 volume") },
-	{ 0,                   XF86XK_AudioLowerVolume,  spawn,  SHCMD("BLOCK_BUTTON=5 volume") },
+	/* modifier              key            function         argument */
+	{ MODKEY,                XK_d,          spawn,           {.v = dmenucmd } },
+	{ MODKEY,                XK_Return,     spawn,           {.v = termcmd } },
+	{ MODKEY,                XK_f,          spawn,           SHCMD("_START_LFCD=1 " TERMINAL) },
+	{ MODKEY,                XK_n,          spawn,           SHCMD("$BROWSER") },
+	{ MODKEY|ControlMask,    XK_n,          spawn,           SHCMD("$BROWSER --incognito") },
+	{ MODKEY|ShiftMask,      XK_n,          spawn,           SHCMD("$BROWSER --tor") },
+	{ MODKEY|Mod1Mask,       XK_n,          spawn,           SHCMD("bookmarks") },
+	{ MODKEY,                XK_m,          spawn,           SHCMD("code") },
+	{ MODKEY,                XK_comma,      spawn,           SHCMD("alacritty --class git -e lazygit") },
+	{ MODKEY,                XK_period,     spawn,           SHCMD("insomnia") },
+	{ MODKEY,                XK_slash,      spawn,           SHCMD("roku") },
+	{ MODKEY,                XK_F8,         spawn,           SHCMD("comms") },
+	{ MODKEY|ShiftMask,      XK_F8,         spawn,           SHCMD("comms -q") },
+	{ MODKEY,                XK_F12,        spawn,           SHCMD("dmenucalc") },
+	MAP(MODKEY,              left,          focusstack,      {.i = -1 }),
+	MAP(MODKEY,              right,         focusstack,      {.i = +1 }),
+	MAP(MODKEY,              up,            pushup,          {0}),
+	MAP(MODKEY,              down,          pushdown,        {0}),
+	MAP(MODKEY|Mod1Mask,     left,          focusmon,        {.i = +1 }),
+	MAP(MODKEY|Mod1Mask,     right,         focusmon,        {.i = -1 }),
+	MAP(MODKEY|Mod1Mask,     up,            tagmon,          {.i = -1 }),
+	MAP(MODKEY|Mod1Mask,     down,          tagmon,          {.i = +1 }),
+	MAP(MODKEY|ControlMask,  left,          setmfact,        {.f = -0.03}),
+	MAP(MODKEY|ControlMask,  right,         setmfact,        {.f = +0.03}),
+	MAP(MODKEY|ControlMask,  up,            setcfact,        {.f = +0.25}),
+	MAP(MODKEY|ControlMask,  down,          setcfact,        {.f = -0.25}),
+	{ MODKEY,                XK_b,          togglebar,       {0} },
+	{ MODKEY,                XK_space,      zoom,            {0} },
+	{ MODKEY,                XK_Tab,        focusmon,        {.i = +1 } },
+	{ MODKEY|Mod1Mask,       XK_Tab,        tagmon,          {.i = -1 } },
+	{ MODKEY|Mod1Mask,       XK_Page_Up,    incnmaster,      {.i = +1 } },
+	{ MODKEY|Mod1Mask,       XK_Page_Down,  incnmaster,      {.i = -1 } },
+	{ MODKEY|ControlMask,    XK_End,        setcfact,        {.f = 0.00} },
+	{ MODKEY,                XK_z,          killclient,      {0} },
+	{ MODKEY|Mod1Mask,       XK_t,          setlayout,       {.v = &layouts[0]} },
+	{ MODKEY|Mod1Mask,       XK_f,          setlayout,       {.v = &layouts[1]} },
+	{ MODKEY|Mod1Mask,       XK_m,          setlayout,       {.v = &layouts[2]} },
+	{ MODKEY|Mod1Mask,       XK_u,          setlayout,       {.v = &layouts[3]} },
+	{ MODKEY|Mod1Mask,       XK_space,      togglefloating,  {0} },
+	{ MODKEY,                XK_0,          view,            {.ui = ~0 } },
+	{ MODKEY|ShiftMask,      XK_0,          tag,             {.ui = ~0 } },
+	{ MODKEY|ControlMask,    XK_p,          spawn,           SHCMD("display-switch") },
+	{ MODKEY|ShiftMask,      XK_p,          spawn,           SHCMD("display-select") },
+	{ 0,                     XK_Print,      spawn,           SHCMD("maimpick -a") },
+	{ ShiftMask,             XK_Print,      spawn,           SHCMD("maimpick") },
+	{ MODKEY,                XK_equal,      spawn,           SHCMD("pamixer --allow-boost -i 5; kill -39 $(pidof dwmblocks)") },
+	{ MODKEY,                XK_minus,      spawn,           SHCMD("pamixer --allow-boost -d 5; kill -39 $(pidof dwmblocks)") },
+	{ MODKEY,                XK_F9,         spawn,           SHCMD("dmenumount") },
+	{ MODKEY,                XK_F10,        spawn,           SHCMD("dmenuumount") },
+	{ MODKEY|ShiftMask,      XK_l,          spawn,           SHCMD("slock || kill -9 -1") },
+	{ MODKEY,                XK_Pause,      spawn,           SHCMD("dunstctl set-paused toggle") },
+	{ ShiftMask,             XK_Pause,      spawn,           SHCMD("dunstctl history-pop") },
+	{ ControlMask,           XK_Pause,      spawn,           SHCMD("dunst-config") },
+	{ MODKEY|ShiftMask,      XK_q,          spawn,           SHCMD("sysact") },
+	TAGKEYS(                 XK_1,          0)
+	TAGKEYS(                 XK_2,          1)
+	TAGKEYS(                 XK_3,          2)
+	TAGKEYS(                 XK_4,          3)
+	TAGKEYS(                 XK_5,          4)
+	TAGKEYS(                 XK_6,          5)
+	TAGKEYS(                 XK_7,          6)
+	TAGKEYS(                 XK_8,          7)
+	TAGKEYS(                 XK_9,          8)
+	TAGKEYS(                 XK_q,          0)
+	TAGKEYS(                 XK_w,          1)
+	TAGKEYS(                 XK_e,          2)
+	TAGKEYS(                 XK_r,          3)
+	TAGKEYS(                 XK_t,          4)
+	TAGKEYS(                 XK_y,          5)
+	TAGKEYS(                 XK_u,          6)
+	TAGKEYS(                 XK_i,          7)
+	TAGKEYS(                 XK_o,          8)
+	{ 0,                     XF86XK_AudioPlay,         spawn,  SHCMD("media-control Play") },
+	{ 0,                     XF86XK_AudioPause,        spawn,  SHCMD("media-control Pause") },
+	{ 0,                     XF86XK_AudioStop,         spawn,  SHCMD("media-control Pause") },
+	{ 0,                     XF86XK_AudioNext,         spawn,  SHCMD("media-control Next") },
+	{ 0,                     XF86XK_AudioPrev,         spawn,  SHCMD("media-control Previous") },
+	{ 0,                     XF86XK_AudioMute,         spawn,  SHCMD("BLOCK_BUTTON=3 volume") },
+	{ 0,                     XF86XK_AudioRaiseVolume,  spawn,  SHCMD("BLOCK_BUTTON=4 volume") },
+	{ 0,                     XF86XK_AudioLowerVolume,  spawn,  SHCMD("BLOCK_BUTTON=5 volume") },
 };
 
 /* button definitions */
