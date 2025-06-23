@@ -200,6 +200,7 @@ static void focus(Client *c);
 static void focusin(XEvent *e);
 static void focusmon(const Arg *arg);
 static void focusstack(const Arg *arg);
+static void focusvert(const Arg *arg);
 static Atom getatomprop(Client *c, Atom prop);
 static int getrootptr(int *x, int *y);
 static long getstate(Window w);
@@ -223,6 +224,7 @@ static Client *prevtiled(Client *c);
 static void propertynotify(XEvent *e);
 static void pushdown(const Arg *arg);
 static void pushup(const Arg *arg);
+static void pushvert(const Arg *arg);
 static Monitor *recttomon(int x, int y, int w, int h);
 static void removesystrayicon(Client *i);
 static void resize(Client *c, int x, int y, int w, int h, int interact);
@@ -1101,6 +1103,68 @@ focusstack(const Arg *arg)
 	}
 }
 
+Monitor *
+lastmon(void) {
+	Monitor *m = mons;
+	while (m && m->next)
+		m = m->next;
+	return m;
+}
+
+Monitor *
+prevmon(Monitor *m) {
+	if (m == mons)
+		return lastmon();
+	for (Monitor *p = mons; p; p = p->next)
+		if (p->next == m)
+			return p;
+	return lastmon(); // fallback
+}
+
+void
+focusclienton(Monitor *m, Client *c) {
+	if (!m) return;
+	unfocus(selmon->sel, 0);
+	selmon = m;
+	focus(c);
+	restack(m);
+	warp(selmon->sel);
+}
+
+void
+focusvert(const Arg *arg) {
+	Client *sel = selmon->sel;
+
+	int dir = arg->i;
+	Client *master = nexttiled(selmon->clients);
+
+	if (dir < 0) { // LEFT
+		if (sel && sel != master) {
+			// stack → master
+			focus(master);
+		} else {
+			// master → prev monitor's stack or master
+			Monitor *m = prevmon(selmon);
+			Client *c = nexttiled(m->clients);
+			Client *stack = c ? nexttiled(c->next) : NULL;
+			focusclienton(m, stack ? stack : c);
+		}
+	} else { // RIGHT
+		if (sel && sel == master) {
+			Client *stack = nexttiled(sel->next);
+			if (stack) {
+				focus(stack); // master → stack
+				return;
+			}
+		}
+		// either not master, or no stack → go to next mon master
+		Monitor *m = selmon->next ? selmon->next : mons;
+
+		Client *c = nexttiled(m->clients);
+		focusclienton(m, c);
+	}
+}
+
 Atom
 getatomprop(Client *c, Atom prop)
 {
@@ -1600,7 +1664,7 @@ propertynotify(XEvent *e)
 		updatesystray();
 	}
 
-    if ((ev->window == root) && (ev->atom == XA_WM_NAME))
+	if ((ev->window == root) && (ev->atom == XA_WM_NAME))
 		updatestatus();
 	else if (ev->state == PropertyDelete)
 		return; /* ignore */
@@ -1671,6 +1735,57 @@ pushup(const Arg *arg) {
 	}
 	focus(sel);
 	arrange(selmon);
+}
+
+void
+pushvert(const Arg *arg) {
+	Client *sel = selmon->sel;
+	if (!sel || sel->isfloating)
+		return;
+
+	int dir = arg->i;
+	Client *master = nexttiled(selmon->clients);
+
+	if (dir < 0) { // LEFT
+		if (sel == master) { // master → prev mon
+			Monitor *m = prevmon(selmon);
+			sendmon(sel, m);
+
+			Client *c = nexttiled(m->clients);
+			Client *stack = c ? nexttiled(c->next) : NULL;
+
+			if (stack) { // move from master to stack
+				detach(sel);
+				sel->next = stack->next;
+				stack->next = sel;
+			}
+			arrange(m);
+			focusclienton(m, sel);
+		} else {
+			// stack → master
+			detach(sel);
+			sel->next = selmon->clients;
+			selmon->clients = sel;
+			arrange(selmon);
+			focus(sel);
+		}
+	} else { // RIGHT
+		if (sel == master) {
+			Client *stack = nexttiled(sel->next);
+			if (stack) {
+				detach(sel);
+				sel->next = stack->next;
+				stack->next = sel;
+				arrange(selmon);
+				focus(sel);
+				return;
+			}
+		}
+		// no stack or from stack → next mon master
+		Monitor *m = selmon->next ? selmon->next : mons;
+		sendmon(sel, m);
+		focusclienton(m, sel);
+	}
 }
 
 Monitor *
