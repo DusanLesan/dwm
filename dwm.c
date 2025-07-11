@@ -1144,7 +1144,7 @@ focusvert(const Arg *arg) {
 			focus(master);
 		} else {
 			// master → prev monitor's stack or master
-			Monitor *m = prevmon(selmon);
+			Monitor *m = selmon->next ? selmon->next : mons;
 			Client *c = nexttiled(m->clients);
 			Client *stack = c ? nexttiled(c->next) : NULL;
 			focusclienton(m, stack ? stack : c);
@@ -1158,8 +1158,7 @@ focusvert(const Arg *arg) {
 			}
 		}
 		// either not master, or no stack → go to next mon master
-		Monitor *m = selmon->next ? selmon->next : mons;
-
+		Monitor *m = prevmon(selmon);
 		Client *c = nexttiled(m->clients);
 		focusclienton(m, c);
 	}
@@ -1748,7 +1747,7 @@ pushvert(const Arg *arg) {
 
 	if (dir < 0) { // LEFT
 		if (sel == master) { // master → prev mon
-			Monitor *m = prevmon(selmon);
+			Monitor *m = selmon->next ? selmon->next : mons;
 			sendmon(sel, m);
 
 			Client *c = nexttiled(m->clients);
@@ -1782,7 +1781,7 @@ pushvert(const Arg *arg) {
 			}
 		}
 		// no stack or from stack → next mon master
-		Monitor *m = selmon->next ? selmon->next : mons;
+		Monitor *m = prevmon(selmon);
 		sendmon(sel, m);
 		focusclienton(m, sel);
 	}
